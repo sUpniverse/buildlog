@@ -1,0 +1,284 @@
+2020-12-16 [version 1.13.0]
+	* [FEATURE] added mgets command
+	* [FEATURE] added persistence function in default engine. (beta)
+	* [FEATURE] added default_engine.conf file to set engine settings.
+	* [IMPROVE] make possible notifying io completion multiple times.
+	* [IMPROVE] reduced the count of calling the number_of_pending().
+	* [IMPROVE] do not increase the refcount when allocate an hash_item.
+	* [IMPROVE] optimized the do_item_replace() function.
+	* [FIX]     set item_count to -2 only ENGINE_ENOMEM in item_scan_getnext().
+	* [FIX]     reset elem_count of erst_array in item_scan_release().
+	* [FIX]     changed the use_cas checking in an existing hash item.
+	* [FIX]     do the blocked io even if preparing coll get response fails.
+	* [FIX]     set rltotal to 0 when read in data to single buffer.
+	* [TEST]    disabled tests about the max item size more than 1mb.
+	* [CLEANUP] added redistribution logs when expand the hash table.
+	* [CLEANUP] set the engine related settings by reloading engine config.
+	* [CLEANUP] added the item apply functions.
+	* [CLEANUP] separated the item module into multiple files.
+	* [CLEANUP] refactored many parts in source code.
+
+2020-09-04 [version 1.12.2]
+	* [FEATURE] support item size exceeding 1MB by removing asserts on that.
+	* [FEATURE] remove dual space in the pipe header response string.
+	* [FIX]     prevent memory out-of-range while printing out key on log.
+	* [FIX]     set to CLIENT_ERROR error when E2BIG error occurs.
+	* [FIX]     fix miscalculation of snprintf string size
+	* [FIX]     clear azk_count during zookeeper rejoin process
+	* [FIX]     call the missed release_independent_stats() when shutdown.
+	* [CLEANUP] added a new item_scan facility.
+	* [CLEANUP] separated the prefix module from the assoc module.
+	* [CLEANUP] used the new item_scan facility when dump items.
+	* [CLEANUP] set max_element_bytes config in engine.
+	* [CLEANUP] do logging when hash collision occurs.
+	* [TEST]    add pipe overflow test.
+	* [TEST]    augment the mop get tests.
+	* [DOC]     modify the format for use in ARCUS documentation system.
+	* [DOC]     add detailed descrption for kv response
+	* [DOC]     add description about config command
+	* [OTHER]   do extensive code refactoring.
+
+2020-03-30 [version 1.12.1]
+	* [FIX]     Fixed memory overwrite when tokernize strings in memory blocks.
+	* [FIX]     Added ENGINE_ENOMEM error handling where it is missed.
+	* [DOC]     Provided the more specific explanation about stats command.
+	* [DOC]     Added a compilation FAQ page.
+	* [TEST]    Added tests for verifying binary bkey OUT_OF_RANGE response.
+
+2020-03-16 [version 1.12.0]
+	* [FEATURE] Changed max_element_bytes(4KB=>16KB) and set configurable.
+	* [FIX]     Added the error handling of retry when an auto scrub fails.
+	* [INTERNAL] Added CLOG_BTREE_ELEM_DELETE_LOGICAL macro.
+	* [CLEANUP] Fixed improper type specifiers and wrong response string.
+	* [CLEANUP] Fixed condition to decrease bucket refcount when scan ends.
+	* [CLEANUP] Fixed some mistakes on code comments.
+	* [DOC]     Removed hyphen in chapter titles.
+	* [DOC]     Removed time option in delete command.
+
+2019-11-20 [version 1.11.8]
+	* [FEATURE] Dump SM info summary when "no more small memory" occurs.
+	* [FEATURE] Print out not absolute but the remaining exptime in key dump.
+	* [FIX]     Fix memory leak when bad data is given in bop update.
+	* [ENHANCE] Increase SSL as free big slot and chunk space decreases.
+	* [ENHANCE] Change SM logic to alloc the smaller avail memory first.
+	* [ENHANCE] Use proper sized memory within engine to get coll elements.
+	* [ENHANCE] DO not increase refcount when allocate an element.
+	* [DOC]     Include contribution process document.
+	* [CLEANUP] Do lots of code refactoring.
+
+2019-09-26 [version 1.11.7]
+	* [FEATURE] Added scrub_count config command.
+	* [FEATURE] Reflect immediately the changed scrub_count while scrubbing.
+	* [ENHANCE] New scrub execution to reduce CPU usage and cache lock duration.
+	* [ENHANCE] Consider the number of collection elements when do scan next.
+	* [ENHANCE] Reduce cache lock duration when evict/reclaim collection items.
+	* [ENHANCE] Define and use NULL bkrange to access all elements of b+tree.
+	* [ENHANCE] Reduce initial size of roottable and realloc as necessary.
+	* [FIX]     Fixed invalid memory access in trim_copy().
+	* [FIX]     Freed the response string buffer only when it exists.
+	* [FIX]     Fixed memory leak when getting hostname by address.
+	* [TEST]    Added code coverage test.
+	* [TEST]    Added lop operation test on a large list collection.
+	* [INTERNAL] Added functions for getting all collection elements.
+	* [INTERNAL] Added change log generation macros for future use.
+	* [CLEANUP] Fixed cppcheck's errors and warnings.
+	* [CLEANUP] Devided store_item() into detailed store functions.
+	* [CLEANUP] Used global engine pointer instead of passing engine argument.
+	* [CLEANUP] Refactored a lot of code for readbility and others.
+
+2019-06-05 [version 1.11.6]
+	* [FEATURE] Add long query detection for map collection.
+	* [FEATURE] Check cache_server_mapping ZK node with hostname.
+	* [FIX]     Incorrect ip checking when it is proxy mode.
+
+2018-10-11 [version 1.11.5]
+	* [ENHANCE] Do exact search instead of full scan when do flush_prefix.
+	* [FEATURE} Increase HEART_BEAT_DFT_FAILSTOP. 30000 => 60000 (ms)
+	* [FEATURE} Increase HEART_BEAT_MAX_FAILSTOP. 60000 => 300000 (ms)
+	* [FEATURE} Add stat_prefixes(# of prefix stats) in stats result.
+	* [FEATURE} Auto-off stats detail when prefix stats count is over 10000.
+	* [FEATURE} Can disable mc heartbeat failstop by setting its value to 0.
+
+2018-08-17 [version 1.11.4]
+	* [Fix]     Fix free space mis-calculation when the last 01pct slot is freed.
+	* [Fix]     Use free small memory if possible when sm space is short of.
+	* [Fix]     Fix the wrong result of bop smget with unique option
+	            when the first bkeys of some btrees are duplicate.
+	* [Fix]     Fix the incr/decr operation on binary bkey value.
+	* {Enhance] Reduce "no more small memory check" messages.
+	* [Manual]  Add description about smallest/largest_silent_trim.
+	* [Manual]  Add description about bop incr/decr with initial value.
+	* [Other]   Reinforce and reorganize arcus-memcached unit tests.
+
+2018-06-07 [version 1.11.3]
+	* [Feature] Removed the useless attribute compatibility check in smget.
+	* [Feature] Forced btree overflow action for temporary use.
+	* [Feature] Automatic srcub stale when a new node is added.
+	* [Feature] Proxy support where memcached operates as a backend of it.
+	* [Feature] Added "cmd_cas" memcached stat and activated cas stats.
+	* [Feature] Increased MAX_SERVICECODE_LENGTH. 32 => 128.
+	* [Feature] Added MAX_HOSTNAME_LENGTH whose value is 128.
+	* [Fix]     Slab free_small_space overflow.
+	* [Fix]     TCP port bug when UDP port of 0 is only specified.
+	* [Fix]     Disabled UDP by default.
+	* [Fix]     Incorrect value length checking of collection.
+	* [Enhance] Handled multiple scattered values of an item or an element.
+	* [Enhance] Used mblocks for command parsing and tokenizing.
+	* [Test]    Reorganized the unit tests.
+	* [Test]    Fixed the intermittent failure in the testapp test.
+	* [Other]   A lot of code refactoring.
+
+2018-02-27 [version 1.11.2]
+	* [Enhance] Improve the logic of finding list elements.
+	* [Fix]     Add missing break when print the long query string.
+	* [Other]   Some code refactoring.
+
+2018-02-02 [version 1.11.1]
+	* [Enhance] Use element count when full range is given in bop count.
+	* [Enhance] Check/move cache items to LRU top only for read operation.
+	* [Other] Turn off printing the increament of space shortage level.
+	* [Other] Fix some typos, do some code refactoring.
+
+2017-09-22 [version 1.11.0]
+	* [Feature] Support long key. KEY_MAX_LENGTH(250 => 32000).
+	* [Feature] Use space separated keys instead of comma separated keys.
+	* [Feature] Add a new mget command, efficient for getting multiple items.
+	* [Fix]     Fix the trimmed/duplicated bugs of bop smget.
+	* [Enhance] Use memory blocks to reduce alloc/free some large memory.
+
+2017-09-01 [version 1.10.3]
+	* [Feature] leave and rejoin when cache_list znode is deleted.
+	* [Feature] Change the name of mcfailstop to zkfailstop.
+	* [Fix] the miscalculated checked value in tokenize_command().
+
+2017-07-28 [version 1.10.2]
+	* [Feature] Add memcached failstop on/off configuration.
+	   - default is memcached failstop on.
+	* [Feature] Use zkensemble command separated from config command.
+	   - To support various operations on ZK ensemble.
+	* [Enhance] Generate log messages when available space becomes scarce.
+
+2017-06-01 [version 1.10.1]
+	* [Enhancement] Alleviate excessive evictions.
+	   - Use the free small space if possible in space shortage status.
+	   - Use 99% of used space to separate the free smalli/avail space.
+	* [Other] Fix typos on docs.
+
+2017-03-24 [version 1.10.0]
+	* [Feature] Added a map collection type.
+	* [Feature] Showed the current prefix count with stats command.
+	* [Feature] Combined the commands for getting/setting configuration
+	            into a single config command.
+	* [Feature] Set the maximum sticky memory with sticky_limit config.
+	* [Feature] Printed the invalid command if bad commad error occurs.
+	* [Feature] Stopped cache node if more than one server mapping znodes exist.
+	* [Fix] Fixed key dump bugs such as memory leak, duplicate dump, etc.
+	* [Fix] Fixed the negative free_chunk_space problem.
+	* [Enhancement] Reduced excessive evictions by adjusting sm classes.
+	* [Enhancement] Enhanced set performance by using prefix pointer
+	                when check invalid items.
+	* [Internal] Managed engine source code with separate engine directories.
+	* [Internal] Added the demo engine for use as a reference engine. 
+	* [Internal] Performed the preparation task for long key support.
+	* [Internal] Performed ZK operation outside of zk watcher with a separate thread.
+	* [Internal] Added/used a scan facility to scan items in hash table.
+	* [Internal] Modified the ketama hash ring structure more usefully.
+	* [Other] Extensive minor enhancements. 
+	* [Other] Extensive code refactoring.
+
+2016-05-22 [version 1.9.5]
+	* Fix config/autorun.sh for arcus build.
+	* Strengthen the integrity of tokenize_keys() function.
+	* Change the output format of lqdetect and cmdlog stats.
+	* Add the number of incr/decr requests on prefix stats.
+	* Fix failing autorun.sh on dash.
+	* Add do_btree/set_elem_delet_fast function as disabled state.
+	* Fix compile warning when use gcc of lower version (ex, 4.1).
+	* Add "SERVER_ERROR out of memory" response in process_bop_update_prepare_nread.
+	* Add cmd_incr/cmd_decr/cmd_delete stats.
+	* Fix the uninitialized variable in lqdetect_dupcheck.
+	* Fix the max integer test failure in OSX environment.
+
+2016-01-27 [version 1.9.4]
+	* Do background eviction only if item_evict_to_free is true.
+	* Close ZK conn before close listen socket during shutdown.
+	* Change package name and bug-report mail address.
+	* Check maximum service code length of 32.
+	* Augment messages printed when client connections are closed.
+	* Add long query(or request) detection funtionality.
+	* Remove the pid file as the first task of shutdown.
+
+2015-11-13 [version 1.9.3]
+	* Complete key dump funtionality.
+	  - fix a mistake in parsing dump ascii command.
+	  - update manual to have key dump usage.
+	* Fix a typo in comand logging usage.
+	* Update manual to have commnag logging usage.
+
+2015-11-09 [version 1.9.2]
+	* Support cache key dump by prefix.
+	* Fix the bug that "SERVER_ERROR internal" is returned
+	  when unique condition is given in smget operation.
+
+2015-11-03 [version 1.9.1]
+	* Restore the old smget interface to ensure backward compatibility.
+	  So, both(the old one and the new one added since 1.9.0) smget
+	  intefaces are supported.
+
+2015-10-26 [version 1.9.0]
+	* Hash table expansion by worker threads. Don't create a daemon thread.
+	* Compute element access overhead in bop delete/count/get/mget.
+	* Swallow the remaining data when command pipeling fails. 
+	* Do more delicate synchronization when close ZK.
+	* Support command logging. 
+	* Link the detached items into LRU top only if they are valid.
+	* New smget interface
+	  - Continue smget even if some bkeys of a key are trimmed in bkey range.
+	    - Missed keys are returned with the cause.
+		  (NOT_FOUND, UNREADABLE, OUT_OF_RANGE).
+		- Trimmed keys are returned with the last bkey before trim. 
+	  - Support unique smget that remove duplicate bkeys as an option.
+	* Set/get maximum collection size with config command.
+
+2015-07-31 [version 1.8.5]
+	* Graceful shutdown waits for all threads to be stopped.
+	* Graceful shutdown closes listen socket and all client connections.
+	* Fix the mistake in setting hb_thread_sleep value.
+	* Increase initial hash table size - 64K => 128K.
+	* Internal code optimization and code refactoring.
+	* Add some preparation code for replication and migration.
+
+2015-05-29 [version 1.8.4]
+	* Set btree trimmed if the insertion of a bkey to trimmed space is tried.
+	* Support large btree(max 1000000 elements), but be careful in using that.
+	* Change memcached heartbeat scheme and make it configurable.
+	* Change reserved slab ratio - from 4 to 5 percent.
+	* Detach the referenced items from LRU at eviction time.
+	* Fix the list element insertion issue when overflow trim occurs.
+	* Extensive code refactoring - remove not-used old code.
+	* Fix some minor bugs.
+
+2015-02-02 [version 1.8.3]
+	* Extensive code refactoring.
+	* Comment out "tap protocol" code.
+	* New EWOULDBLOCK and notify_io_complete handling.
+	* Clarify item unlink and element delete causes. 
+
+2014-12-30 [version 1.8.2]
+	* Reduce "too many evictions" occurrences.
+
+2014-09-22 [version 1.8.1]
+	* Support Mac OSX (Mavericks)
+
+2014-07-24 [version 1.8.0]
+	* Add bop pwg(position with get) command.
+	* Configurable max collection size, but limitative.
+
+2014-06-12 [version 1.7.1]
+	* Fix the memory corruption by integer overflow of list index.
+
+2014-05-15 
+	* arcus-memcached is opened. (Apache License 2.0)
+
+2014-04-30 
+	* arcus-memcached: version 1.7.0 release
